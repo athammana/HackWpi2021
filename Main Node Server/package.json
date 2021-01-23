@@ -1,0 +1,24 @@
+{
+  "name": "main-server",
+  "version": "1.0.0",
+  "description": "Brains of the operation",
+  "main": "server.js",
+  "scripts": {
+    "test": "npm test",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/athammana/HackWpi2021.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/athammana/HackWpi2021/issues"
+  },
+  "homepage": "https://github.com/athammana/HackWpi2021#readme",
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1"
+  }
+}
