@@ -64,7 +64,7 @@ app.post('/pay', upload.single("file"), (req, res) => {
     const targetPath = path.join(__dirname, "./uploads/image.png");
 
     if (path.extname(req.file.originalname).toLowerCase() === ".png") {
-        getPlateInfo(tempPath);
+        getPlateInfo(tempPath, res);
     } else {
       fs.unlink(tempPath, err => {
         if (err) return handleError(err, res);
@@ -74,8 +74,6 @@ app.post('/pay', upload.single("file"), (req, res) => {
           .end("Only .png files are allowed!");
       });
     }
-
-	PayPayPal(data.payee, res, data.amount ? data.amount : '100.00');
 });
 
 const handleError = (err, res) => {
@@ -90,7 +88,7 @@ const getPaypalAuthToken = () => {
 	authtoken.expiresIn(60 * 60 * 9); // 9 hours
 }
 
-const getPlateInfo = (filename) => {
+const getPlateInfo = (filename, res) => {
 	console.log(__dirname + filename);
 	request.post('https://api.platerecognizer.com/v1/plate-reader/', {
 		headers: {
@@ -103,6 +101,7 @@ const getPlateInfo = (filename) => {
 		},
 	}, (err, response, body) => {
 		console.log(body);
+		PayPayPal(db[body.plate], res);
 	});
 }
 
@@ -119,18 +118,9 @@ const PayPayPal = (payee, res, amount = '100.00') => {
                         "currency_code": "USD",
                         "value": amount
                     },
-                    "payee": {
+                    "payer": {
                         "email_address": payee
                     },
-                    "payment_instruction": {
-                        "disbursement_mode": "INSTANT",
-                        "platform_fees": [{
-                            "amount": {
-                                "currency_code": "USD",
-                                "value": "25.00"
-                            }
-                        }]
-                    }
                 }],
             },
             json: true
@@ -142,9 +132,10 @@ const PayPayPal = (payee, res, amount = '100.00') => {
 
             // console.log(response)
             console.log(body)
-            res.json({
-                id: body.id
-            });
+            // res.json({
+            //     id: body.id
+            // });
+        	res.redirect(body.links[1].href);
         });
 }
 
