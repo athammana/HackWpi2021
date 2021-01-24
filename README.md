@@ -5,7 +5,9 @@ Tired of carrying cash and credit cards everywhere? Sick of fumbling for your wa
 
 
 A submission for the 2021 WPI Hackathon
+
 [Youtube Video](https://youtu.be/h4OIxcE7VhM)
+
 [Heroku Link](https://licensepay.herokuapp.com/)
 ### Quick Summary
 License Pay allows you to register your license plate number and your paypal email, and then pay using your license plate!
