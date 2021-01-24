@@ -9,7 +9,7 @@ const { MongoClient } = require("mongodb");
 
 
 let collection;
-let authtoken = 'A21AALTx__Oo4oAAZm7gTAYuYYLoVI7s-4yuXwMY3bNUNoef8kuZ64qS4DPR85BbT9dEGUeKkqF-tx2qTjx_CkPNWvKhETgNg';
+let authtoken = 'A21AAJmMo_Oqjz7Mu5eXcdwqSKt3AwOPqnr48Efl4tiEtF1tfn80pczdRJDMTRO7s62FaeoKHhPnO9F2sIHhMO1ebUKYeYP7g';
 const mongouri = 'mongodb+srv://mongouser:'+ process.env.MONGO_PASS +'@cluster0.qjvrv.mongodb.net/<dbname>?retryWrites=true&w=majority';
 const port = 3000;
 const app = express();
