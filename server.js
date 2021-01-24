@@ -5,21 +5,15 @@ const request = require('request');
 const express = require('express');
 const dotenv = require('dotenv').config();
 const bodyParser = require('body-parser');
-// const bodyParser = require('body-parser');
-// const clientoauth2 = require('client-oauth2');
-const { ClientCredentials, ResourceOwnerPassword, AuthorizationCode } = require('simple-oauth2');
+const { MongoClient } = require("mongodb");
 
 
-let db = [];
+let collection;
 let authtoken = 'A21AALTx__Oo4oAAZm7gTAYuYYLoVI7s-4yuXwMY3bNUNoef8kuZ64qS4DPR85BbT9dEGUeKkqF-tx2qTjx_CkPNWvKhETgNg';
+const mongouri = 'mongodb+srv://mongouser:'+ process.env.MONGO_PASS +'@cluster0.qjvrv.mongodb.net/<dbname>?retryWrites=true&w=majority';
 const port = 3000;
 const app = express();
-
-// let paypalAuth = new clientoauth2({
-// 	clientId: process.env.PAYPAL_CLIENT_ID,
-// 	clientSecret: process.env.PAYPAL_CLIENT_SECRET,
-// 	accessTokenUri: 'https://api-m.sandbox.paypal.com/v1/oauth2/token',
-// });
+const client = new MongoClient(mongouri);
 
 const config = {
   client: {
@@ -31,9 +25,6 @@ const config = {
   }
 };
 
-// const upload = multer({
-  // dest: __dirname + "/tempfiles"
-// });
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
   	cb(null, __dirname + "/tempfiles");
@@ -55,7 +46,7 @@ app.get('/camera', (req, res) => {
 
 app.post('/register', (req, res) => {
 	let data = JSON.parse(JSON.stringify(req.body));
-	db.push(data);
+	collection.insertOne(data);
 	res.sendFile('public/success.html', {root: __dirname});
 });
 
@@ -75,6 +66,14 @@ app.post('/pay', upload.single("file"), (req, res) => {
       });
     }
 });
+
+const mongoConn = async () => {
+	await client.connect();
+	const database = client.db('licenses');
+	collection = database.collection('hackWPI');
+}
+
+mongoConn();
 
 const handleError = (err, res) => {
   res
@@ -100,8 +99,11 @@ const getPlateInfo = (filename, res) => {
 			'upload': fs.createReadStream(filename),
 		},
 	}, (err, response, body) => {
-		console.log(body);
-		PayPayPal(db[body.plate], res);
+		body = JSON.parse(body);
+		collection.findOne({lp: body.results[0].plate}, (err, doc) => {
+			if (err) return errorhandler(err, req, res, next);
+			if (doc) PayPayPal(doc['paypal'], res);
+		});	
 	});
 }
 
