@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+   <head>
+      <meta charset="utf-8">
+      <title>Camera Page</title>
+      <meta name="description" content="Registering your license for a hackathon">
+      <meta name="author" content="Abhijay Thammana">
+      <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <link type="text/css" rel="stylesheet" href="css/materialize.min.css"/>
+      <link type="text/css" rel="stylesheet" href="css/styles.css"/>
+   </head>
+   <body>
+      <script type="text/javascript" src="js/materialize.min.js"></script>
+      <div class="login container">
+         <div class="col m6">
+            <div class="card center-align">
+               <div class="card-content">
+                  <form enctype="multipart/form-data" action="/pay" method="POST">
+                    <div class="row">
+                      <div class="input-field col s12">
+                        <i class="material-icons prefix">file_copy</i>
+                        <input type="file" id="licenseplate" name="file">
+                      </div>
+                    </div>
+                    <div class="card-action">
+                      <button class="btn waves-effect waves-light red lighten-3 black-text" type="submit" >Send
+                        <i class="material-icons right">send</i>
+                      </button>
+                    </div>
+                  </form>
+               </div>
+            </div>
+         </div>
+      </div>
+   </body>
+</html>
